@@ -1,3 +1,28 @@
+# ===================================================================================================================================
+#
+# Paper Name: Novel Subgroup of Meningiomas Involving FOS and FOSB Gene Fusions
+# ===================================================================================================================================
+# 
+# Description: This code facilitates the bulk RNA-seq analysis performed on meningioma samples to uncover novel genomic and transcriptomic 
+# features in uncharacterized tumor subgroups. The workflow begins with preprocessing, including quality control, adapter trimming, and 
+# alignment of RNA-seq reads to a reference genome, followed by gene expression quantification. Differential expression analysis identifies 
+# key genes and pathways, focusing on AP-1 complex targets and immune cell activity in tumors with FOS/FOSB fusion Functional enrichment 
+# analysis and clustering highlight unique transcriptomic profiles associated with the novel FOS/FOSB fusion subgroup. 
+# Additionally, the code generates high-quality visualizations of differential expression, enriched pathways etc., providing insights into 
+# the biology of this meningioma subtype and potential therapeutic targets.
+#
+# Author: Hasan Alanya, MSc;  Kanat Yalcin, MD.; Zeynep Erson-Omay, PhD
+#
+# Contact PI: Murat Gunel
+#
+# Date: 12/6/2024 
+#
+# Group Page: https://ersonlab.org/
+#
+# GitHub: https://github.com/ErsonLab/FOS_FOSB_Paper
+#
+# ===================================================================================================================================
+
 #########################################################
 ### Step 0 : Import Libraries
 #########################################################
