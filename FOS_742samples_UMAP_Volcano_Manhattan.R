@@ -14,7 +14,7 @@
 #
 # Author: Hasan Alanya, MSc;  Kanat Yalcin, MD.; Zeynep Erson-Omay, PhD
 #
-# Contact PI: Murat Gunel, PhD
+# Contact PI: Murat Gunel, MD
 #
 # Date: 12/6/2024 
 #
