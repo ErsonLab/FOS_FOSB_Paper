@@ -1,3 +1,27 @@
+# ===================================================================================================================================
+#
+# Paper Name: Novel Subgroup of Meningiomas Involving FOS and FOSB Gene Fusions
+#
+# ===================================================================================================================================
+# 
+# Description: This code performs XCell analysis to deconvolute bulk RNA-seq data and estimate the relative abundance of various cell types within the samples. 
+# By leveraging gene expression signatures, it provides insights into the tumor microenvironment and its potential role in shaping the distinct 
+# biological characteristics of the analyzed samples.
+#
+# Author: Kanat Yalcin, MD; Hasan Alanya, MSc
+#
+# Contact PI: Zeynep Erson-Omay, PhD; Murat Gunel, MD
+#
+# Date: 12/6/2024 
+#
+# Group Page: https://ersonlab.org/ and https://medicine.yale.edu/lab/gunel/
+#
+# GitHub: https://github.com/ErsonLab/FOS_FOSB_Paper
+#
+# ===================================================================================================================================
+
+
+
 # Load required libraries
 library(reshape2)
 library(dplyr)
@@ -101,7 +125,8 @@ for (cell_type in top_15_cell_types) {
   cat("Saved:", file_name, "\n")
 }
 
-#####
+######################################################################
+
 # Initialize a list to store the plots
 combined_plot_list <- list()
 
