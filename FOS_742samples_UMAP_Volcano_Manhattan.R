@@ -12,13 +12,13 @@
 # Additionally, the code generates high-quality visualizations of differential expression, enriched pathways etc., providing insights into 
 # the biology of this meningioma subtype and potential therapeutic targets.
 #
-# Author: Hasan Alanya, MSc;  Kanat Yalcin, MD.; Zeynep Erson-Omay, PhD
+# Author: Kanat Yalcin, MD; Hasan Alanya, MSc
 #
-# Contact PI: Murat Gunel, MD
+# Contact PI: Zeynep Erson-Omay, PhD; Murat Gunel, MD
 #
 # Date: 12/6/2024 
 #
-# Group Page: https://ersonlab.org/
+# Group Page: https://ersonlab.org/ and https://medicine.yale.edu/lab/gunel/
 #
 # GitHub: https://github.com/ErsonLab/FOS_FOSB_Paper
 #
