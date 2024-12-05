@@ -11,7 +11,7 @@
 # cell type distributions and significant pairwise comparisons, offering a detailed understanding of the tumor microenvironment's composition 
 # and variability.
 #
-# Author: Kanat Yalcin, MD; Hasan Alanya, MSc
+# Author: Hasan Alanya, MSc ; Kanat Yalcin, MD
 #
 # Contact PI: Zeynep Erson-Omay, PhD; Murat Gunel, MD
 #
