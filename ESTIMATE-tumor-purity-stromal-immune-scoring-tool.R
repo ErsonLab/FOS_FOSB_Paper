@@ -1,3 +1,23 @@
+# ===================================================================================================================================
+#
+# Paper Name: Novel Subgroup of Meningiomas Involving FOS and FOSB Gene Fusions
+#
+# ===================================================================================================================================
+# 
+# Description: 
+#
+# Author: Batur Gultekin, BSc
+#
+# Contact PI: Zeynep Erson-Omay, PhD; Murat Gunel, MD
+#
+# Date: 12/6/2024 
+#
+# Group Page: https://ersonlab.org/ and https://medicine.yale.edu/lab/gunel/
+#
+# GitHub: https://github.com/ErsonLab/FOS_FOSB_Paper
+#
+# ===================================================================================================================================
+
 #Software Website: https://bioinformatics.mdanderson.org/public-software/estimate/
 
 # Install and load the required packages
