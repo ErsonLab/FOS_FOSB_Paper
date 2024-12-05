@@ -1,8 +1,35 @@
+# ===================================================================================================================================
+#
+# Paper Name: Novel Subgroup of Meningiomas Involving FOS and FOSB Gene Fusions
+#
+# ===================================================================================================================================
+# 
+# Description: This code utilizes CIBERSORTx to estimate the relative proportions of immune and stromal cell types from bulk RNA-seq data, 
+# providing insights into the cellular composition of tumor samples. It includes preprocessing steps to integrate cell-type proportions with 
+# clustering results and visualizes the distribution of various cell types across clusters using box plots. Statistical analysis is performed
+# using the Wilcoxon test to identify significant differences between clusters. The results are visualized with customized plots, highlighting 
+# cell type distributions and significant pairwise comparisons, offering a detailed understanding of the tumor microenvironment's composition 
+# and variability.
+#
+# Author: Kanat Yalcin, MD; Hasan Alanya, MSc
+#
+# Contact PI: Zeynep Erson-Omay, PhD; Murat Gunel, MD
+#
+# Date: 12/6/2024 
+#
+# Group Page: https://ersonlab.org/ and https://medicine.yale.edu/lab/gunel/
+#
+# GitHub: https://github.com/ErsonLab/FOS_FOSB_Paper
+#
+# ===================================================================================================================================
+
+# Load the required libraries
 library(ggplot2)
 library(dplyr)
 library(tidyr)
 library(ggsignif)
 
+# Load the datasets 
 cibersortx_results <- read.csv("/Users/hasanalanya/Desktop/ErsonLab-Yale/FOS-Meningioma/BulkRNA/HTseq_700/Results/CIBERSORTx/CIBERSORTx_Job4_Results.csv")
 umap_clusters <- read.csv("/Users/hasanalanya/Desktop/ErsonLab-Yale/FOS-Meningioma/BulkRNA/HTseq_700/Results/09172024_umap_df_3d_742_cases_8_clusters.csv")
 
