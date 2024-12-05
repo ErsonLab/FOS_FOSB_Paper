@@ -8,7 +8,7 @@
 # By leveraging gene expression signatures, it provides insights into the tumor microenvironment and its potential role in shaping the distinct 
 # biological characteristics of the analyzed samples.
 #
-# Author: Kanat Yalcin, MD; Hasan Alanya, MSc
+# Author: Hasan Alanya, MSc ; Kanat Yalcin, MD
 #
 # Contact PI: Zeynep Erson-Omay, PhD; Murat Gunel, MD
 #
