@@ -74,6 +74,7 @@ library(dbscan)
 library(stringr)
 library(umap)
 library(ggrepel)
+library(ggsignif)
 
 #########################################################
 ### Step 1 : Data Import and Pre-processing
@@ -1314,4 +1315,76 @@ create_manhattan_plot_v12(enrich_results, "Cluster_2_vs_All_padj_log2fc_2", outp
 
 save.image("/Users/hasanalanya/Desktop/ErsonLab-Yale/FOS-Meningioma/BulkRNA/FOS_ManuscriptSubmission_2024/Code/FOS_742samples_UMAP_Volcano_Manhattan.RData")
 
+#########################################################################################
+### Step 6 : GENE EXPRESSION COMPARISON BETWEEN CLUSTERS FOR SPECIFIC GENES OF INTEREST
+#########################################################################################
+                                                 
+combat_counts_vst_geneSymbol <- as.data.frame(counts(deseq_dds,normalized=TRUE))
 
+rownames(combat_counts_vst_geneSymbol) <- gsub("\\.[0-9]*","",rownames(combat_counts_vst_geneSymbol))
+head(combat_counts_vst_geneSymbol)
+
+combat_counts_vst_geneSymbol$gene_symbol <- mapIds(EnsDb.Hsapiens.v86,
+                          keys=row.names(combat_counts_vst_geneSymbol),
+                          column="SYMBOL",
+                          keytype="GENEID",
+                          multiVals="first")
+combat_counts_vst_geneSymbol$biotype <- mapIds(EnsDb.Hsapiens.v86,
+                             keys=row.names(combat_counts_vst_geneSymbol),
+                             column="GENEBIOTYPE",
+                             keytype="GENEID",
+                             multiVals="first")
+
+combat_counts_vst_geneSymbol <- na.omit(combat_counts_vst_geneSymbol)
+# Define the genes of interest
+
+genes_of_interest <- c("CRLF2", "ARHGAP36", "PPARG", "DLK1", "CEBPA", "NOTCH3", "JAK3", "BRD4", "FCER1A", "KIT", "IL6", "TNFRSF9", "CFB", "IHH", "DHH", "SHH", "TPSAB1", "TPSB2")
+
+# Identify the sample columns (excluding 'gene_symbol' and 'biotype')
+sample_columns <- setdiff(colnames(combat_counts_vst_geneSymbol), c("gene_symbol", "biotype"))
+
+# Extract expression data for the genes of interest
+expr_df <- combat_counts_vst_geneSymbol[combat_counts_vst_geneSymbol$gene_symbol %in% genes_of_interest, sample_columns]
+
+# Set the row names to gene symbols for clarity
+rownames(expr_df) <- combat_counts_vst_geneSymbol$gene_symbol[combat_counts_vst_geneSymbol$gene_symbol %in% genes_of_interest]
+
+# Transpose the expression dataframe to align samples with `umap_df_3d` row indices
+expr_df_t <- t(expr_df)
+
+# Convert the transposed data to a data frame
+expr_df_t <- as.data.frame(expr_df_t)
+
+# Ensure that sample names match between the two dataframes
+common_samples <- intersect(rownames(umap_df_3d), rownames(expr_df_t))
+
+# Subset both dataframes to include only the common samples
+umap_df_3d_sub <- umap_df_3d[common_samples, ]
+expr_df_t_sub <- expr_df_t[common_samples, ]
+
+# Combine the dataframes by adding the expression data as new columns
+umap_df_3d_with_genes <- cbind(umap_df_3d_sub, expr_df_t_sub)
+
+color_palette <- c("#FC8D62", "#B79FEC", "#E78AC3", "#C49A6C", "#B3DE69", "#FFD92F", "#E5C494", "#B3B3B3")
+
+umap_df_3d_noise_removed_with_genes <- subset(umap_df_3d_with_genes, Cluster != 0)
+p <- ggplot(umap_df_3d_noise_removed_with_genes, aes(x = factor(Cluster), y = TPSB2, fill = factor(Cluster))) +
+  geom_boxplot() +
+  scale_fill_manual(values = color_palette) +
+  labs(x = "Cluster", y = "Proportion", title = "TPSB2", fill = "Cluster") +  # Remove dots from title
+  theme_minimal() +
+  theme(panel.background = element_rect(fill = "white", colour = "black"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        text = element_text(size = 12),
+        axis.title = element_text(size = 14, face = "bold"),
+        axis.text = element_text(size = 12),
+        legend.title = element_text(size = 16, face = "bold"),
+        legend.text = element_text(size = 10),
+        plot.title = element_text(face = "bold", size = 16)) +
+  geom_signif(comparisons = list(c(2,1), c(2,3), c(2,4), c(2,5), c(2,6), c(2,7), c(2,8)),
+              map_signif_level = FALSE, 
+              test = "wilcox.test", 
+              step_increase = 0.05)
+
+ggsave("plot_TPSB2.pdf", plot = p, width = 10, height = 9, dpi = 300, bg = "white")
