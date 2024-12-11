@@ -1660,7 +1660,8 @@ res_2_vs_all <- results(deseq_dbscan, name = "group_Cluster_2_vs_Rest")
 library(apeglm) # ensure apeglm is installed and loaded
 res_2_vs_all_shrunk <- lfcShrink(deseq_dbscan, 
                                  coef="group_Cluster_2_vs_Rest", 
-                                 type="apeglm")
+                                 type="apeglm",
+                                lfcThreshold=0.1)
 
 head(res_2_vs_all_shrunk)
 
