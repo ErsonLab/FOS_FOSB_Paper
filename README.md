@@ -88,7 +88,7 @@ This repository provides **R scripts** (v.4.3.2) and **data** used to identify a
 
 ## **6. Authors & Contact**  
 - **Lead Authors**:  
-  - 
+  - Kanat Yalcin, Hasan Alanya, Batur Gultekin
 - **Principal Investigators**:  
   - Zeynep Erson-Omay, PhD  
   - Murat Gunel, MD  
