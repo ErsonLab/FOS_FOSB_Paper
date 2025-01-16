@@ -20,20 +20,20 @@ This repository provides **R scripts** and **data** used to identify and charact
        
    - **Trimming & Alignment**:  
      - **Trim Galore** (v.0.6.7) for adapter trimming  
-     - **STAR** for read alignment  
-   - **Gene Quantification**: **HTSeq** (GRCh37)
+     - **STAR** (v.2.7.11a) for read alignment  
+   - **Gene Quantification**: **HTSeq** (GRCh37) (v.0.13.5)
 
 2. **Batch Correction & Normalization**  
-   - **ComBat-Seq** for batch adjustment  
+   - **ComBat-Seq** (v.3.50.0) for batch adjustment  
    - **VST** (Variance Stabilizing Transformation)  
 
 3. **Dimensionality Reduction & Clustering**  
-   - **PCA** and **UMAP** for data visualization  
-   - **dbscan** for unsupervised sample clustering  
+   - **PCA** and **UMAP** (v.0.2.10.0) for data visualization  
+   - **dbscan** (v.1.2.0) for unsupervised sample clustering  
 
 4. **Differential Expression & Enrichment**  
-   - **DESeq2** to identify key differentially expressed genes  
-   - **enrichR** for GO, KEGG, and TF enrichment analyses  
+   - **DESeq2** (v.1.42.1) to identify key differentially expressed genes  
+   - **enrichR** (v.3.2) for GO, KEGG, and TF enrichment analyses  
 
 5. **Visualization**  
    - **3D UMAP** plots (mutation status, batch, clusters)  
@@ -41,7 +41,7 @@ This repository provides **R scripts** and **data** used to identify and charact
    - **Boxplots** for selected genes of interest  
 
 6. **Immune & Microenvironment Analysis**  
-   - **CIBERSORTx** and **xCell** for cell-type deconvolution (immune/stromal)  
+   - **CIBERSORTx** and **xCell** (v.1.1.0)for cell-type deconvolution (immune/stromal)  
    - **ESTIMATE** for tumor purity, stromal, and immune scores  
 
 ---
