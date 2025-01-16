@@ -11,7 +11,13 @@ This repository provides **R scripts** and **data** used to identify and charact
 ## **2. Pipeline Outline**  
 1. **Data Acquisition**  
    - **Public Datasets**: Downloaded from the Sequence Read Archive (SRA) via **SRA Toolkit**  
-     - Example: `XXX`, `XXX`, etc.  
+     - Baylor College of Medicine (160 cases; GEO accession number: **GSE136661**)
+     - University of California San Francisco (185 cases; GEO accession number: **GSE183656**)
+     - Palacky University and University Hospital (70 cases; ENA accession number: **PRJNA705586**)
+     - Fred Hutchinson Cancer Center (279 cases; GEO accession number: **GSE252291**)
+     - Yale University School of Medicine (19 cases; GEO accession number: **GSE85133**)
+     - Yale University School of Medicine (23 cases; ENA accession number: **PRJEB55424**)
+       
    - **Trimming & Alignment**:  
      - **Trim Galore** for adapter trimming  
      - **STAR** for read alignment  
