@@ -19,7 +19,7 @@ This repository provides **R scripts** and **data** used to identify and charact
      - Yale University School of Medicine (23 cases; ENA accession number: **PRJEB55424**)
        
    - **Trimming & Alignment**:  
-     - **Trim Galore** for adapter trimming  
+     - **Trim Galore** (v.0.6.7) for adapter trimming  
      - **STAR** for read alignment  
    - **Gene Quantification**: **HTSeq** (GRCh37)
 
