@@ -17,6 +17,7 @@ This repository provides **R scripts** (v.4.3.2) and **data** used to identify a
      - Fred Hutchinson Cancer Center (279 cases; GEO accession number: **GSE252291**)
      - Yale University School of Medicine (19 cases; GEO accession number: **GSE85133**)
      - Yale University School of Medicine (23 cases; ENA accession number: **PRJEB55424**)
+     - The data generated and analyzed during this study will be available in the European Nucleotide Archive (ENA) under accession number: **PRJEB81142**
        
    - **Trimming & Alignment**:  
      - **Trim Galore** (v.0.6.7) for adapter trimming  
