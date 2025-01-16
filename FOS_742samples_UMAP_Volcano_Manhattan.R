@@ -103,7 +103,7 @@ fhcc_nf2_cases <- c(
   "SRR27388679", "SRR27388685", "SRR27388694", "SRR27388700", "SRR27388701"
 )
 
-mark_nf2_cases <- c(
+yale_nf2_cases <- c(
   "SRR3995999",
   "SRR3995996",
   "SRR3995988",
@@ -114,7 +114,7 @@ mark_nf2_cases <- c(
   "ERR12048882"
 )
 
-mark_hedgehog_cases <- c(
+yale_hedgehog_cases <- c(
   "ERR12048892",
   "ERR12048883",
   "ERR12048894",
@@ -128,27 +128,27 @@ mark_hedgehog_cases <- c(
 )
 
 
-mark_TRAF7_KLF4_cases <- c(
+yale_TRAF7_KLF4_cases <- c(
   "SRR3996000",
   "SRR3996004",
   "SRR3995995",
   "SRR3995989"
 )
 
-mark_TRAF7_PI3K_cases <- c(
+yale_TRAF7_PI3K_cases <- c(
   "SRR3996003",
   "SRR3995987",
   "SRR3995994"
 )
 
-mark_POLR2A_cases <- c(
+yale_POLR2A_cases <- c(
   "SRR3995998",
   "SRR3996001",
   "SRR3996002",
   "SRR3996005"
 )
 
-mark_3PLOSS_cases <- c(
+yale_3PLOSS_cases <- c(
   "ERR12048890",
   "ERR12048893",
   "ERR12048901"
@@ -166,19 +166,19 @@ determine_nf2_status <- function(srr, fos_status) {
   if (srr %in% fhcc_nf2_cases) {
     return("NF2")
   }
-  if (srr %in% mark_nf2_cases) {
+  if (srr %in% yale_nf2_cases) {
     return("NF2")
   }
-  if (srr %in% mark_hedgehog_cases) {
+  if (srr %in% yale_hedgehog_cases) {
     return("SMO/HH")
   }
-  if (srr %in% mark_TRAF7_KLF4_cases) {
+  if (srr %in% yale_TRAF7_KLF4_cases) {
     return("TRAF7/KLF4")
   }
-  if (srr %in% mark_TRAF7_PI3K_cases) {
+  if (srr %in% yale_TRAF7_PI3K_cases) {
     return("TRAF7/PI3K")
   }
-  if (srr %in% mark_POLR2A_cases) {
+  if (srr %in% yale_POLR2A_cases) {
     return("POLR2A")
   }
   
@@ -286,12 +286,6 @@ colors <- brewer.pal(n_clusters, "Set2")
 umap_df_3d_noise_removed <- subset(umap_df_3d, Cluster != 0)
 
 
-batch_labels <- umap_df_3d_noise_removed$Cluster
-
-clusters <- sort(unique(batch_labels))
-
-# Number of clusters
-n_clusters <- length(clusters)
 colors <- c("red", "gray", "blue", "orange", "cyan", "purple", "green")
 # Create a 3D scatter plot with plotly, with colors for clusters, shapes for FOS_Fusion_Status, and sample names on hover
 three_dplot_dbscan <- plot_ly(umap_df_3d_noise_removed, 
@@ -820,7 +814,6 @@ convert_and_filter_protein_coding <- function(res) {
   return(res_proteincoding)
 }
 
-# Function to convert gene IDs to gene symbols and filter by protein-coding
 convert_but_dont_filter_protein_coding <- function(res) {
   # Remove version numbers from gene IDs
   rownames(res) <- gsub("\\.[0-9]*", "", rownames(res))
@@ -832,14 +825,6 @@ convert_but_dont_filter_protein_coding <- function(res) {
                             keytype = "GENEID",
                             multiVals = "first")
   
-  #res$biotype <- mapIds(EnsDb.Hsapiens.v86,
-  #                      keys = row.names(res),
-  #                      column = "GENEBIOTYPE",
-  #                      keytype = "GENEID",
-  #                      multiVals = "first")
-  
-  # Filter for protein-coding genes and remove NAs
-  #res_proteincoding <- dplyr::filter(as.data.frame(res), biotype == "protein_coding")
   res <- na.omit(res)
   
   return(res)
@@ -947,7 +932,6 @@ pairwise_results[["Cluster_2_vs_All_padj_abs_log2fc_2"]] <- res_filtered_all_abs
 
 print("Stored results for Cluster 2 vs All")
 
-## <---- BURDAYIZ
 #############################################################################################################################
 ### Pairwise Enrichment ### 
 
@@ -1298,11 +1282,6 @@ gobp_z <- read.csv("/Users/hasanalanya/Desktop/ErsonLab-Yale/FOS-Meningioma/Bulk
 
 # Get the filtered genes (gene symbols) for the current comparison
 filtered_genes <- pairwise_results[["Cluster_2_vs_All_padj_log2fc_2"]]$gene_symbol
-
-# If no genes, skip this iteration
-#if (length(filtered_genes) == 0) {pairwise_results[["Cluster_2_vs_All_padj_log2fc_2"]]
-#  next
-#}
 
 # Run enrichment analysis on Biological Processes, KEGG, and Transcription Factors
 enrich_results_bp_kegg <- enrichr(filtered_genes, selected_dbs_bp_kegg)
