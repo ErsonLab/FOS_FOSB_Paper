@@ -4,7 +4,7 @@
 ---
 
 ## **1. Summary**  
-This repository provides **R scripts** and **data** used to identify and characterize a **novel meningioma subgroup** harboring **FOS** and **FOSB** gene fusions. The analyses leverage **bulk RNA-seq** data with a focus on **preprocessing**, **differential gene expression**, and **microenvironment** deconvolution.
+This repository provides **R scripts** (v.4.3.2) and **data** used to identify and characterize a **novel meningioma subgroup** harboring **FOS** and **FOSB** gene fusions. The analyses leverage **bulk RNA-seq** data with a focus on **preprocessing**, **differential gene expression**, and **microenvironment** deconvolution.
 
 ---
 
@@ -41,7 +41,7 @@ This repository provides **R scripts** and **data** used to identify and charact
    - **Boxplots** for selected genes of interest  
 
 6. **Immune & Microenvironment Analysis**  
-   - **CIBERSORTx** and **xCell** (v.1.1.0)for cell-type deconvolution (immune/stromal)  
+   - **CIBERSORTx** and **xCell** (v.1.1.0) for cell-type deconvolution (immune/stromal)  
    - **ESTIMATE** for tumor purity, stromal, and immune scores  
 
 ---
