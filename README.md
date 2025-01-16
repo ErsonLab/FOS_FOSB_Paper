@@ -97,4 +97,4 @@ Visit our labs for more details:
 - [Erson Lab](https://ersonlab.org/)  
 - [Gunel Lab](https://medicine.yale.edu/lab/gunel/)
 
-For questions or feedback, please contact: 
+For questions or feedback, please contact: **zeynep.erson@yale.edu** or **murat.gunel@yale.edu**
