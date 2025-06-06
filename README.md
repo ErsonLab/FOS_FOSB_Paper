@@ -42,12 +42,12 @@ This repository provides **R scripts** (v.4.3.2) and **data** used to identify a
    - **enrichR** (v.3.2) for GO, KEGG, and TF enrichment analyses  
 
 5. **Visualization**  
-   - **3D UMAP** plots (mutation status, batch, clusters)  
+   - **2D UMAP** plots (mutation status, batch, clusters)  
    - **Volcano/Manhattan** plots for DEGs and enriched pathways  
    - **Boxplots** for selected genes of interest  
 
 6. **Immune & Microenvironment Analysis**  
-   - **CIBERSORTx** and **xCell** (v.1.1.0) for cell-type deconvolution (immune/stromal)  
+   - **CIBERSORTx**, **xCell** (v.1.1.0), **MuSiC (Multi-subject Single-cell Deconvolution for cell-type deconvolution)** (immune/stromal)  
    - **ESTIMATE** for tumor purity, stromal, and immune scores  
 
 ---
