@@ -74,7 +74,7 @@ This repository provides **R scripts** (v.4.3.2) and **data** used to identify a
 1. **Clone/Download** this repo.  
 2. **Install** required R packages:  
    - Core (e.g., **DESeq2**, **sva**, **dbscan**, **clusterProfiler**, **ggplot2**, **plotly**, etc.)  
-   - Deconvolution tools (e.g., **CIBERSORTx**, **xCell**, **ESTIMATE**)  
+   - Deconvolution tools (e.g., **CIBERSORTx**, **xCell**, **ESTIMATE**, **MuSiC**)  
 3. **Edit paths** in each script to match your file system.  
 4. **Run** the scripts in order or selectively, depending on your analysis goals.
 
@@ -89,6 +89,7 @@ This repository provides **R scripts** (v.4.3.2) and **data** used to identify a
 - **CIBERSORTx**: <https://cibersortx.stanford.edu/>  
 - **xCell**: <https://xcell.ucsf.edu/>  
 - **ESTIMATE**: <https://bioinformatics.mdanderson.org/public-software/estimate/>
+- **MuSiC** <https://xuranw.github.io/MuSiC/articles/MuSiC.html>
 
 ---
 
