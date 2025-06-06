@@ -65,7 +65,7 @@ library(RColorBrewer)
 library(ggsignif)
 
 #INPUT: COMBAT VST Count Matrix
-COMBAT_VST_COUNT_MATRIX <- read.table("combat_counts_vst.txt", sep = "\t", header = TRUE)
+COMBAT_VST_COUNT_MATRIX <- read.table("combat_counts_vst.tsv", sep = "\t", header = TRUE, row.names = 1)
 
 #Add the gene symbols and make them row names 
 rownames(COMBAT_VST_COUNT_MATRIX) <- gsub("\\.[0-9]*", "", rownames(COMBAT_VST_COUNT_MATRIX))
@@ -89,10 +89,10 @@ COMBAT_VST_COUNT_MATRIX_ESTIMATE <- aggregated_data
 write.table(COMBAT_VST_COUNT_MATRIX_ESTIMATE, "ESTIMATE.txt", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
 filterCommonGenes("ESTIMATE.txt", output.f="COMBAT_VST_COUNT_MATRIX_ESTIMATE_GENES.gct", id="GeneSymbol")
 estimateScore("COMBAT_VST_COUNT_MATRIX_ESTIMATE_GENES.gct", "COMBAT_VST_COUNT_MATRIX_ESTIMATE_SCORE.gct", platform="affymetrix")
-plotPurity(scores="COMBAT_VST_COUNT_MATRIX_ESTIMATE_SCORE.gct", samples="n=742", platform="affymetrix")
+plotPurity(scores="COMBAT_VST_COUNT_MATRIX_ESTIMATE_SCORE.gct", samples="n=1232", platform="affymetrix")
 
 gct_data <- read.table("COMBAT_VST_COUNT_MATRIX_ESTIMATE_SCORE.gct", skip = 2, header = TRUE, sep = "\t", quote = "", stringsAsFactors = FALSE)
-umap_clusters <- read.table("09172024_umap_df_3d_742_cases_8_clusters.csv", sep = ",", header = TRUE)
+umap_clusters <- read.table("./Downloads/umap_clusters_metadata_12_clusters_2d.csv", sep = ",", header = TRUE)
 
 # Convert to long format using melt
 gct_data_long <- melt(gct_data, id.vars = c("NAME", "Description"), variable.name = "Sample", value.name = "Score")
@@ -105,7 +105,7 @@ all_clusters_ESTIMATE_input <- merged_data
 
 merged_data <- all_clusters_ESTIMATE_input
 # Modify the 'Cluster' column, setting Cluster 2 to remain "2" and others to "all"
-merged_data$Cluster <- ifelse(merged_data$Cluster == 2, "Cluster 2", "The Rest")
+merged_data$Cluster <- ifelse(merged_data$Cluster == "11", "Cluster 11", "The Rest")
 
 # Check the updated dataframe
 head(merged_data)
@@ -115,8 +115,20 @@ unique_scores <- unique(merged_data$NAME)
 
 # Provided color codes
 color_palette <- c("#B79FEC", "orange")
-#color_palette <- c("#FC8D62", "#B79FEC", "#E78AC3", "#C49A6C", 
-#                   "#B3DE69", "#FFD92F", "#E5C494", "#B3B3B3")
+color_palette <- c(
+"1"  = "#CCA77E",
+"2"  = "#EE9174",
+"3"  = "#B29CB1",
+"4"  = "#AF9AC8",
+"5"  = "#E08CC4",
+"6"  = "#CDB490",
+"7"  = "#AED851",
+"8"  = "#E3D93E",
+"9"  = "#FAD450",
+"10" = "#EAC786",
+"11" = "#D1BDA1",
+"12" = "#B3B3B3"
+)
 
 # Loop through each score to create individual plots and store them in the list
 plot_list <- list()
@@ -135,18 +147,16 @@ for (score in unique_scores) {
           axis.text = element_text(size = 22),
           legend.title = element_text(size = 24, face = "bold"),
           legend.text = element_text(size = 20),
-          plot.title = element_text(face = "bold", size = 22))
-  #geom_signif(comparisons = list(c("Cluster 2","The Rest")), map_signif_level = FALSE, test = "wilcox.test", step_increase = 0.05)
-  #list(c(2,1),c(2,3),c(2,4),c(2,5),c(2,6),c(2,7),c(2,8)), map_signif_level = FALSE, test = "wilcox.test", step_increase = 0.05)
-  
+          plot.title = element_text(face = "bold", size = 22)) +
+  geom_signif(comparisons = list(c("Cluster 11","The Rest")), map_signif_level = FALSE, test = "wilcox.test", step_increase = 0.05)
+
   plot_list[[score]] <- p
 }
 
 combined_plot <- grid.arrange(grobs = plot_list, ncol = 2)
 
 # Save the combined plot using ggsave
-ggsave("ESTIMATE_results_by_cluster.pdf", 
-       plot = combined_plot,, width = 12, height = 9, dpi = 300, bg = "white")
-
+ggsave("ESTIMATE_results_vs_rest.pdf", 
+       plot = combined_plot, width = 12, height = 9, dpi = 300, bg = "white")
 
 
