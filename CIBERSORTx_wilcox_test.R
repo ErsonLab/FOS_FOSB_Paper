@@ -22,147 +22,125 @@
 # GitHub: https://github.com/ErsonLab/FOS_FOSB_Paper
 #
 # ===================================================================================================================================
+# =====================================================================
+# CIBERSORTx: Cluster 11 vs All-Other Comparison (with p-value legend)
+# =====================================================================
 
-# Load the required libraries
+# 1) Libraries
 library(ggplot2)
+library(rstatix)
 library(dplyr)
 library(tidyr)
 library(ggsignif)
 
-# Load the datasets 
-cibersortx_results <- read.csv("/Users/hasanalanya/Desktop/ErsonLab-Yale/FOS-Meningioma/BulkRNA/HTseq_700/Results/CIBERSORTx/CIBERSORTx_Job4_Results.csv")
-umap_clusters <- read.csv("/Users/hasanalanya/Desktop/ErsonLab-Yale/FOS-Meningioma/BulkRNA/HTseq_700/Results/09172024_umap_df_3d_742_cases_8_clusters.csv")
+# 2) Load data
+cibersortx_results <- read.csv("/Users/kanatyalcin/Downloads/CIBERSORTx_Job31_Results.csv")
+umap_clusters      <- read.csv("/Users/kanatyalcin/umap_cluster_info_1232.csv")
 
-# Rename the column to match
-colnames(umap_clusters)[1] <- "Mixture" 
+# 3) Preprocess
+colnames(umap_clusters)[1] <- "Mixture"
 
-# Remove Cluster 0 - this is noise
-umap_clusters <- umap_clusters[umap_clusters$Cluster != 0, ]
-
-# Merge the data on "Mixture"
 merged_data <- merge(cibersortx_results, umap_clusters, by = "Mixture")
 
-# Reshape data for plotting
+# 4) Reshape and recode to binary groups
 long_data <- merged_data %>%
-  dplyr::select(Mixture, Cluster, `B.cells.naive`, `T.cells.CD8`, `T.cells.CD4.memory.resting`,
-                `T.cells.follicular.helper`, `NK.cells.resting`, `NK.cells.activated`, `Monocytes`,
-                `Macrophages.M2`, `Mast.cells.resting`, `Neutrophils`) %>%
-  pivot_longer(cols = -c(Mixture, Cluster), names_to = "Cell_Type", values_to = "Value")
+  select(Mixture, Cluster,
+         `B.cells.naive`, `T.cells.CD8`, `T.cells.CD4.memory.resting`,
+         `T.cells.follicular.helper`, `NK.cells.resting`, `NK.cells.activated`,
+         `Monocytes`, `Macrophages.M2`, `Mast.cells.resting`, `Neutrophils`
+  ) %>%
+  pivot_longer(cols = -c(Mixture, Cluster),
+               names_to = "Cell_Type", values_to = "Value") %>%
+  mutate(
+    ClusterGroup = factor(
+      ifelse(Cluster == 11, "Cluster 11", "Rest"),
+      levels = c("Rest", "Cluster 11")
+    )
+  )
 
+# 5) Color palette for the two groups
+binary_palette <- c("Rest" = "#FC8D62", "Cluster 11" = "#B3B3B3")
 
-color_palette <- c("#FC8D62", "#B79FEC", "#E78AC3", "#C49A6C", 
-                   "#B3DE69", "#FFD92F", "#E5C494", "#B3B3B3")
-
-                    
-box_plot <- ggplot(long_data, aes(x = factor(Cluster), y = Value, fill = factor(Cluster))) +
+# 6) Combined facet plot with caption legend
+combined_plot <- ggplot(long_data, aes(x = ClusterGroup, y = Value, fill = ClusterGroup)) +
   geom_boxplot() +
   facet_wrap(~Cell_Type, scales = "free_y", ncol = 4) +
-  scale_fill_manual(values = color_palette) + 
+  scale_fill_manual(values = binary_palette) +
   labs(
-    x = "Cluster", 
-    y = "Proportion", 
-    title = "Distribution of Cell Types across Clusters", 
-    fill = "Cluster"
+    x       = "Cluster",
+    y       = "Proportion",
+    title   = "Cluster 11 vs All Rest",
+    fill    = "Cluster",
+    caption = "*: p < 0.05; **: p < 0.01; ***: p < 0.001"
   ) +
   theme_minimal() +
   theme(
-    axis.text = element_text(size = 30, face = "bold"),      # Match tick labels font size
-    axis.title = element_text(size = 40, face = "bold"),     # Match axis labels font size
-    legend.title = element_blank(),                          # Match legend title
-    legend.text = element_text(size = 30),                   # Match legend text size
-    legend.position = "right",                              # Match legend position
-    panel.grid = element_blank(),                            # Remove grid lines
-    plot.background = element_rect(fill = "white", colour = "black", linewidth = 2),
-    panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
-    plot.title = element_text(size = 48, face = "bold", hjust = 0.5),  # Match plot title font size
-    strip.text = element_text(size = 30, face = "bold", hjust = 0),
-    panel.spacing = unit(2, "lines"),           # Increase space between facets
-    plot.margin = unit(c(1, 1, 1, 1), "cm")     # Match plot title font size
+    axis.text        = element_text(size = 30, face = "bold"),
+    axis.title       = element_text(size = 40, face = "bold"),
+    legend.title     = element_text(size = 35, face = "bold"),
+    legend.text      = element_text(size = 30),
+    legend.position  = "right",
+    panel.grid       = element_blank(),
+    plot.background  = element_rect(fill = "white", colour = "black", linewidth = 2),
+    panel.border     = element_rect(colour = "black", fill = NA, linewidth = 2),
+    plot.title       = element_text(size = 48, face = "bold", hjust = 0.5),
+    strip.text       = element_text(size = 30, face = "bold", hjust = 0),
+    panel.spacing    = unit(2, "lines"),
+    plot.margin      = unit(c(1,1,1,1), "cm"),
+    plot.caption     = element_text(size = 20, hjust = 0, face = "italic")
+  ) +
+  geom_signif(
+    comparisons      = list(c("Rest", "Cluster 11")),
+    map_signif_level = TRUE,
+    textsize         = 6,
+    step_increase    = 0.05
   )
 
-# Save the updated plot
 ggsave(
-  "/Users/hasanalanya/Desktop/ErsonLab-Yale/FOS-Meningioma/BulkRNA/HTseq_700/Figures/CIBERSORTx_box_plot_updated.png", 
-  plot = box_plot, width = 30, height = 28, dpi = 300, bg = "white"
+  "CIBERSORTx_cluster11_vs_rest_facet.png",
+  combined_plot, width = 36, height = 26, dpi = 300
 )
 
-
-# Wilcoxon test with BH correction
-comparison_results <- long_data %>%
-  group_by(Cell_Type) %>%
-  pairwise_wilcox_test(Value ~ Cluster, p.adjust.method = "BH") %>%
-  filter(p.adj.signif != "ns" & p.adj.signif != "*") %>%
-  mutate(label = paste0("p.adj = ", format.pval(p.adj, digits = 3)))
-
-# Split comparison results by cell type
-list_of_dfs <- split(comparison_results, comparison_results$Cell_Type)
-
-# Create a list of comparison pairs for significance annotation
-list_of_lists <- lapply(list_of_dfs, function(df) {
-  lapply(seq_len(nrow(df)), function(i) {
-    c(as.character(df[i, "group1"]), as.character(df[i, "group2"]))
-  })
-})
-
-# Create a list to store plots
+# 7) Individual plots per cell type (with same caption)
 plot_list <- list()
-
-# Loop through each cell type to create individual plots
-for(cell_type in unique(long_data$Cell_Type)) {
-  # Filter data for the current cell type
-  data_subset <- long_data %>% filter(Cell_Type == cell_type)
-  
-  # Define the plot for the current cell type
-  p <- ggplot(data_subset, aes(x = factor(Cluster), y = Value, fill = factor(Cluster))) +
+for (ct in unique(long_data$Cell_Type)) {
+  df_ct <- filter(long_data, Cell_Type == ct)
+  p <- ggplot(df_ct, aes(x = ClusterGroup, y = Value, fill = ClusterGroup)) +
     geom_boxplot() +
-    scale_fill_manual(values = color_palette) +
+    scale_fill_manual(values = binary_palette) +
     labs(
-      x = "Cluster",
-      y = "Proportion",
-      title = gsub("\\.", " ", cell_type),  # Remove dots from title
-      fill = "Cluster"
+      x       = "Cluster",
+      y       = "Proportion",
+      title   = gsub("\\.", " ", ct),
+      fill    = "Cluster",
+      caption = "*: p < 0.05; **: p < 0.01; ***: p < 0.001"
     ) +
     theme_minimal() +
     theme(
-      axis.text = element_text(size = 30, face = "bold"),      # Increase tick labels font size
-      axis.title = element_text(size = 35, face = "bold"),     # Increase axis labels font size
-      legend.title = element_blank(),                          # Remove legend title
-      legend.text = element_text(size = 30),                   # Increase legend text size
-      legend.position = "right",                              # Move legend to bottom
-      panel.grid = element_blank(),                            # Remove grid lines
-      plot.background = element_rect(fill = "white", colour = "white", linewidth = 2),
-      panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
-      plot.title = element_text(size = 40, face = "bold", hjust = 0)  # Increase plot title font size
+      axis.text        = element_text(size = 30, face = "bold"),
+      axis.title       = element_text(size = 35, face = "bold"),
+      legend.title     = element_text(size = 35, face = "bold"),
+      legend.text      = element_text(size = 30),
+      legend.position  = "right",
+      panel.grid       = element_blank(),
+      plot.background  = element_rect(fill = "white", colour = "white", linewidth = 2),
+      panel.border     = element_rect(colour = "black", fill = NA, linewidth = 2),
+      plot.title       = element_text(size = 40, face = "bold", hjust = 0),
+      plot.caption     = element_text(size = 16, hjust = 0, face = "italic")
+    ) +
+    geom_signif(
+      comparisons      = list(c("Rest", "Cluster 11")),
+      map_signif_level = TRUE,
+      textsize         = 6,
+      step_increase    = 0.05
     )
-  
-  # Add significance markers if comparisons exist for the current cell type
-  if (!is.null(list_of_lists[[cell_type]])) {
-    p <- p + geom_signif(
-      comparisons = list_of_lists[[cell_type]],
-      map_signif_level = FALSE, 
-      step_increase = 0.05
-    )
-  }
-  
-  # Add the plot to the list
-  plot_list[[cell_type]] <- p
+  plot_list[[ct]] <- p
 }
 
-# Save each plot individually
-ggsave("/Users/hasanalanya/Desktop/ErsonLab-Yale/FOS-Meningioma/BulkRNA/HTseq_700/Figures/plot_mast_cell_resting.pdf", 
-       plot = plot_list[["Mast.cells.resting"]], width = 8, height = 8, dpi = 300, bg = "white")
-
-ggsave("/Users/hasanalanya/Desktop/ErsonLab-Yale/FOS-Meningioma/BulkRNA/HTseq_700/Figures/plot_t_cells_cd8.pdf", 
-       plot = plot_list[["T.cells.CD8"]], width = 8, height = 8, dpi = 300, bg = "white")
-
-ggsave("/Users/hasanalanya/Desktop/ErsonLab-Yale/FOS-Meningioma/BulkRNA/HTseq_700/Figures/plot_t_cells_follicular_helper.pdf", 
-       plot = plot_list[["T.cells.follicular.helper"]], width = 8, height = 8, dpi = 300, bg = "white")
-
-ggsave("/Users/hasanalanya/Desktop/ErsonLab-Yale/FOS-Meningioma/BulkRNA/HTseq_700/Figures/plot_nk_cells_activated.pdf", 
-       plot = plot_list[["NK.cells.activated"]], width = 8, height = 8, dpi = 300, bg = "white")
-
-ggsave("/Users/hasanalanya/Desktop/ErsonLab-Yale/FOS-Meningioma/BulkRNA/HTseq_700/Figures/plot_monocytes.pdf", 
-       plot = plot_list[["Monocytes"]], width = 8, height = 8, dpi = 300, bg = "white")
-
-ggsave("/Users/hasanalanya/Desktop/ErsonLab-Yale/FOS-Meningioma/BulkRNA/HTseq_700/Figures/plot_macrophages_m2.pdf", 
-       plot = plot_list[["Macrophages.M2"]], width = 8, height = 8, dpi = 300, bg = "white")
+# 8) Save a few example individual plots
+ggsave("plot_mast_cells_resting_simplified_c8_vs_all.pdf",  plot_list[["Mast.cells.resting"]],  width=14, height=10, dpi=300)
+ggsave("plot_t_cells_cd8_simplified_c8_vs_all.pdf",        plot_list[["T.cells.CD8"]],        width=14, height=10, dpi=300)
+ggsave("plot_t_cells_follicular_helper_simplified_c8_vs_all.pdf", plot_list[["T.cells.follicular.helper"]], width=14, height=10, dpi=300)
+ggsave("plot_nk_cells_activated_simplified_c8_vs_all.pdf", plot_list[["NK.cells.activated"]], width=14, height=10, dpi=300)
+ggsave("plot_monocytes_simplified_c8_vs_all.pdf",          plot_list[["Monocytes"]],          width=14, height=10, dpi=300)
+ggsave("plot_macrophages_m2_simplified_c8_vs_all.pdf",     plot_list[["Macrophages.M2"]],     width=14, height=10, dpi=300)
